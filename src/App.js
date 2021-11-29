@@ -28,7 +28,7 @@ function App() {
     }
     ]);
 
-  const [shoWAddTask, setShowAddTask] = useState(false);
+  const [showAddTask, setShowAddTask] = useState(false);
 
   // Add Task 
   const addTask = (task) => {
@@ -60,8 +60,11 @@ function App() {
   return (
 
     <div className="container">
-      <Header onAdd={() => setShowAddTask(!shoWAddTask)}/>
-      {shoWAddTask && <AddTask onAdd={addTask}/>}
+      <Header 
+        onAdd={() => setShowAddTask(!showAddTask)} 
+        showAdd={showAddTask}
+      />
+      {showAddTask && <AddTask onAdd={addTask}/>}
       {tasks.length > 0 ? 
         (<Tasks onToggle={toggleReminder} tasks={tasks} onDelete={deleteTask}/>) : (<h3>No tasks to show</h3>)
       }
