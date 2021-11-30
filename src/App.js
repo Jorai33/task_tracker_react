@@ -1,44 +1,56 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Header from "./components/Header";
 import Tasks from "./components/Tasks";
 import AddTask from "./components/AddTask";
 
 function App() {
 
-  // Data Normally brought with an API
-  // useState Hook (with "defaultTasks" as Initial "tasks" VALUE )
-  const [tasks, setTasks] = useState([
-    {
-        id: 1,
-        text: "Doctor's Appointment",
-        day: "Feb 5th at 2:30pm",
-        reminder: true
-    },
-    {
-        id: 2,
-        text: "Meeting at School",
-        day: "Feb 6th at 1:30pm",
-        reminder: true
-    },
-    {
-        id: 3,
-        text: "Food Shopping",
-        day: "Feb 7th at 3:45pm",
-        reminder: false
-    }
-    ]);
-
+  // Data is brought by JSON SERVER fake rest api / database 
+  
+  // useState Hooks
+  const [tasks, setTasks] = useState([]);
   const [showAddTask, setShowAddTask] = useState(false);
+  
+  // useEffect Hook called when page loads & reloads
+  useEffect(() => {
+    // Get the Tasks From the database when the page reloads
+     fetchTasks();
+  }, []);
+
+
+  const fetchTasks = () => {
+     fetch("http://localhost:5000/tasks")
+     .then((res) => res.json())
+     .then((data) => {
+       return setTasks(data);
+     })
+  }
+
 
   // Add Task 
-  const addTask = (task) => {
-    const id = Math.floor(Math.random() * 10000) + 1;
-    const newTask = {id, ...task};
-    setTasks([...tasks, newTask]);
+  const addTask = (task) => {    
+    fetch("http://localhost:5000/tasks", {
+      method: "POST",
+      headers: {
+        "Content-type": "application/json"
+      },
+      body: JSON.stringify(task)
+    })
+    .then((res) => res.json())
+    .then((data) =>  {
+       setTasks([...tasks, data]);
+    });
+
   }
 
   // Delete Task
   const deleteTask = (id) => {
+    // Delete from Database
+    fetch(`http://localhost:5000/tasks/${id}`, {
+      method: "DELETE"
+    });
+    
+    // Delete from UI
     setTasks(tasks.filter((task) => {
      return task.id !== id;
     }));

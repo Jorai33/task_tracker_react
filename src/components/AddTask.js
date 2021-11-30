@@ -1,9 +1,9 @@
-// Each input needs a state ( COMPONENENT LEVEL STATE )
+// Each form input needs a state ( COMPONENENT LEVEL STATE )
 import { useState } from "react";
 
 function AddTask({onAdd}) {
 
-    const [text, setTaskName] = useState("");
+    const [text, setText] = useState("");
     const [day, setDay] = useState("");
     const [reminder, setReminder] = useState(false);
 
@@ -18,8 +18,8 @@ function AddTask({onAdd}) {
         // Add the Task
         onAdd({ text, day, reminder });
 
-        // Clear inputs after tsk is Added
-        setTaskName("");
+        // Clear inputs after task is Added
+        setText("");
         setDay("");
         setReminder(false);
     }
@@ -28,7 +28,7 @@ function AddTask({onAdd}) {
         <form onSubmit={onSubmit} className="add-form">
             <div className="form-control">
                 <label>Task</label>
-                <input type="text" placeholder="Add Task" value={text} onChange={(e) => setTaskName(e.target.value) } />
+                <input type="text" placeholder="Add Task" value={text} onChange={(e) => setText(e.target.value) } />
             </div>
             <div className="form-control">
                 <label>Day & Time</label>
